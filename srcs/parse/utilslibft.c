@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-t_map	*ms_lstnew(void *content)
+t_map	*ms_lstnew(int type, void *content)
 {
 	t_map	*lst;
 
@@ -20,6 +20,7 @@ t_map	*ms_lstnew(void *content)
 	if (!lst)
 		return (NULL);
 	lst->line = content;
+	lst->type = type;
 	lst->next = NULL;
 	return (lst);
 }
