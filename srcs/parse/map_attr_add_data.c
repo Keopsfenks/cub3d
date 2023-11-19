@@ -6,53 +6,87 @@
 /*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 09:43:31 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/11/16 19:28:54 by segurbuz         ###   ########.fr       */
+/*   Updated: 2023/11/17 04:17:26 by segurbuz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	read_map_2(t_data *data, t_map *map, enum e_map type)
+void	attr_add_data2(enum e_map type, char *line, int *i)
 {
+	char	*str;
 	int		fd;
-	char	*emap;
 
-	fd = open(data->map_arg, O_RDONLY);
-	while (1)
+	if (type == SOUTH || type == NORTH || type == WEST || type == EAST)
 	{
-		emap = get_next_line(fd);
-		if (!emap)
-		{
-			free(emap);
-			break ;
-		}
-		ms_lstadd_back(&map, ms_lstnew(type, ft_strdup(emap)));
-		free(emap);
+		(*i) = 2;
+		while (line[(*i)] && line[(*i)] == ' ')
+			(*i)++;
+		str = ft_substr(line, (*i), ft_strlen(line + (*i)) - 1);
+		fd = open(str, O_RDONLY);
+		free(str);
+		if (fd < 0)
+			ft_error();
+		close(fd);
 	}
-	close(fd);
 }
 
 void	attr_add_data(char *line \
 	, t_map **texture, enum e_map type, int *check)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	*check += 1;
-	if (type == SOUTH || type == NORTH || type == WEST || type == EAST)
-	{
-		i = 2;
-		while (line[i] && line[i] == ' ')
-			i++;
-	}
-	else if (type == FLOOR || type == CEILING)
+	attr_add_data2(type, line, &i);
+	if (type == FLOOR || type == CEILING)
 	{
 		i = 1;
 		while (line[i] && line[i] == ' ')
 			i++;
 	}
 	ms_lstadd_back(texture, ms_lstnew(type \
-		, ft_substr(line + i, 0, ft_strlen(line + i))));
+		, ft_substr(line, i, ft_strlen(line + i) - 1)));
+}
+
+void	num_limit_check2(t_map *tmp, int *i, int *size, int *num)
+{
+	char	*str;
+
+	if (tmp->line[(*i)] == ',' || tmp->line[(*i)] == '\n')
+	{
+		str = ft_substr(tmp->line, (*num) - (*size), (*size));
+		if (ft_atoi(str) > 255)
+			ft_error();
+		(*size) = 0;
+		free(str);
+	}
+}
+
+void	num_limit_check(t_map *color)
+{
+	t_map	*tmp;
+	int		i;
+	int		size;
+	int		num;
+
+	tmp = color;
+	size = 0;
+	num = 0;
+	while (tmp)
+	{
+		i = -1;
+		while (tmp->line[++i])
+		{
+			if (ft_isdigit(tmp->line[i]))
+			{
+				size++;
+				num = i + 1;
+			}
+			num_limit_check2(tmp, &i, &size, &num);
+		}
+		tmp = tmp->next;
+	}
 }
 
 void	map_attr_add_data(t_data *data)
@@ -80,4 +114,5 @@ void	map_attr_add_data(t_data *data)
 		if (check == 6)
 			break ;
 	}
+	num_limit_check(data->attr->color);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ogenc <ogenc@student.42.fr>                +#+  +:+       +#+         #
+#    By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/09 22:54:12 by ogenc             #+#    #+#              #
-#    Updated: 2023/01/02 15:16:17 by ogenc            ###   ########.fr        #
+#    Updated: 2023/11/19 23:46:47 by segurbuz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,10 +64,11 @@ bonusobj = $(bonuslist:.c=.o)
 all: $(NAME)
 
 .c.o:
-	$(CC) -c $(CFLAGS) $<
+	@printf "\033[33mGenerating Libft objects... %-33.33s\r" $@
+	@$(CC) -c $(CFLAGS) $<
 
 $(NAME): $(OBJS)
-	ar -rcs $(NAME) $(OBJS)
+	@ar -rcs $(NAME) $(OBJS)
 
 clean:
 	rm -f $(OBJS) $(bonusobj)
@@ -78,6 +79,6 @@ fclean: clean
 re:fclean $(NAME)
 
 bonus:  $(bonusobj) $(OBJS)
-	ar -rcs $(NAME) $(bonusobj) $(OBJS)
+	@ar -rcs $(NAME) $(bonusobj) $(OBJS)
 
 .PHONY: clean fclean all re bonus

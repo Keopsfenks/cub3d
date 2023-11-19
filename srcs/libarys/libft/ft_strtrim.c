@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogenc <ogenc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 17:16:19 by ogenc             #+#    #+#             */
-/*   Updated: 2022/12/22 14:35:25 by ogenc            ###   ########.fr       */
+/*   Updated: 2023/11/17 04:20:16 by segurbuz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include "libft.h"
 
 static int	ft_isset(char c, const char *set)
 {

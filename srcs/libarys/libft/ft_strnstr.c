@@ -6,11 +6,11 @@
 /*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 18:04:06 by ogenc             #+#    #+#             */
-/*   Updated: 2023/11/13 17:52:34 by segurbuz         ###   ########.fr       */
+/*   Updated: 2023/11/17 04:20:12 by segurbuz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include "libft.h"
 
 char	*ft_strnstr(const char *str, const char *needle, size_t len)
 {

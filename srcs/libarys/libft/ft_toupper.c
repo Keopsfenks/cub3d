@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogenc <ogenc@student.42.fr>                +#+  +:+       +#+        */
+/*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 18:17:28 by ogenc             #+#    #+#             */
-/*   Updated: 2023/01/02 15:07:05 by ogenc            ###   ########.fr       */
+/*   Updated: 2023/11/17 04:20:26 by segurbuz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include "libft.h"
 
 int	ft_toupper(int c)
 {
