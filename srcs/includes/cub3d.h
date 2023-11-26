@@ -6,12 +6,15 @@
 /*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 22:28:38 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/11/17 04:45:05 by segurbuz         ###   ########.fr       */
+/*   Updated: 2023/11/20 12:23:13 by segurbuz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
+
+# define WINDOW_X 1920
+# define WINDOW_Y 1080
 
 # include <stddef.h>
 # include <stdio.h>
@@ -40,7 +43,7 @@ typedef struct s_map
 	char			*line;
 	int				type;
 	struct s_map	*next;
-	struct s_map	*prev;		
+	struct s_map	*prev;
 }					t_map;
 
 typedef struct s_attr
@@ -52,6 +55,8 @@ typedef struct s_attr
 
 typedef struct s_data
 {
+	void	*mlx;
+	void	*win;
 	t_map	*map_cub;
 	char	*map_arg;
 	t_attr	*attr;

@@ -10,7 +10,9 @@ NAME = cub3d
 SRC_DIR = srcs
 OBJ_DIR = srcs/obj
 CC = gcc
+RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror
+LFLAGS = -framework AppKit -framework OpenGL -L./srcs/libarys/mlx -lmlx
 OBJS =  $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LIBFT = $(SRC_DIR)/libarys/libft/libft.a
 MLX = $(SRC_DIR)/libarys/mlx/libmlx.a
@@ -20,15 +22,15 @@ GNL = $(SRC_DIR)/libarys/get_next_line/get_next_line.c \
 all: $(NAME)
 
 $(NAME): $(MLX) $(OBJ_DIR) $(OBJS) $(LIBFT)
-	@echo "\n"
-	@$(CC) $(CFLAGS) $(OBJS) $(GNL) $(LIBFT) $(MLX) -o $(NAME)
+	@echo "\n"f
+	@$(CC) $(CFLAGS) $(LFLAGS) $(OBJS) $(GNL) $(LIBFT) $(MLX) -o $(NAME)
 	@echo "\033[5m\033[32mBuild successfull !\033[25m\033[0m"
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)/parse
 
-$(OBJ_DIR)/%.o:   $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@printf "\033[33mGenerating Cub3D objects... %-33.33s\r" $@
 	@${CC} ${CFLAGS} -c $< -o $@
 
@@ -40,7 +42,7 @@ $(MLX):
 	@make -C ./srcs/libarys/mlx
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJ_DIR)
 	@make clean -C ./srcs/libarys/libft
 	@make clean -C ./srcs/libarys/mlx	
 
