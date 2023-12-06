@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: keopsfenks <keopsfenks@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 19:31:44 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/11/17 03:57:07 by segurbuz         ###   ########.fr       */
+/*   Updated: 2023/12/05 01:32:37 by keopsfenks       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ bool	map_find_attr(char *line, char *find)
 void	parse_with_map_content(char *line, bool *flag, int *check)
 {
 	int	flag2;
-	int	i;
 
 	flag2 = 1;
-	i = -1;
 	if (ft_strncmp(line, "SO", 2) == 0 || ft_strncmp(line, "NO", 2) == 0
 		|| ft_strncmp(line, "WE", 2) == 0 || ft_strncmp(line, "EA", 2) == 0)
 	{
@@ -53,12 +51,10 @@ void	parse_with_map_content(char *line, bool *flag, int *check)
 
 void	parse_with_color(char *line, bool *flag, int *rule)
 {
-	int	comma;
 	int	i;
 	int	check;
 	int	digit_check;
 
-	comma = 2;
 	check = 0;
 	digit_check = 0;
 	i = -1;

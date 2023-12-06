@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: keopsfenks <keopsfenks@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 22:28:38 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/11/20 12:23:13 by segurbuz         ###   ########.fr       */
+/*   Updated: 2023/12/06 22:53:08 by keopsfenks       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define WINDOW_X 1920
-# define WINDOW_Y 1080
+# define WINDOW_X 1024
+# define WINDOW_Y 512
 
 # include <stddef.h>
 # include <stdio.h>
@@ -59,6 +59,12 @@ typedef struct s_data
 	void	*win;
 	t_map	*map_cub;
 	char	*map_arg;
+	void	*floor;
+	float	p_x;
+	float	p_y;
+	float	pl_a;
+	void	*player;
+	void	*wall;
 	t_attr	*attr;
 }	t_data;
 
