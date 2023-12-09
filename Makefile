@@ -11,7 +11,7 @@ SRC_DIR = srcs
 OBJ_DIR = srcs/obj
 CC = gcc
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = #-Wall -Wextra -Werror
 LFLAGS = -L./srcs/libarys/mlx -lmlx -L/usr/lib -I/usr/include -lXext -lX11 -lm -lz
 OBJS =  $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LIBFT = $(SRC_DIR)/libarys/libft/libft.a

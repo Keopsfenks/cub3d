@@ -6,7 +6,7 @@
 /*   By: keopsfenks <keopsfenks@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 22:28:38 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/12/06 22:53:08 by keopsfenks       ###   ########.fr       */
+/*   Updated: 2023/12/09 04:03:23 by keopsfenks       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CUB3D_H
 
 # define WINDOW_X 1024
-# define WINDOW_Y 512
+# define WINDOW_Y 510
 
 # include <stddef.h>
 # include <stdio.h>
@@ -53,11 +53,21 @@ typedef struct s_attr
 	t_map	*color;
 }			t_attr;
 
+typedef struct s_var
+{
+	float		px;
+	float		py;
+	float		pdx;
+	float		pdy;
+	float		pa;
+}				t_var;
+
 typedef struct s_data
 {
 	void	*mlx;
 	void	*win;
 	t_map	*map_cub;
+	t_var	var;
 	char	*map_arg;
 	void	*floor;
 	float	p_x;
