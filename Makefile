@@ -12,7 +12,7 @@ OBJ_DIR = srcs/obj
 CC = gcc
 RM = rm -rf
 CFLAGS = #-Wall -Wextra -Werror
-LFLAGS = -L./srcs/libarys/mlx -lmlx -L/usr/lib -I/usr/include -lXext -lX11 -lm -lz
+LFLAGS = -L./srcs/libarys/mlx -lmlx -L/usr/lib -I/usr/include -lXext -lX11 -lm -lz -O2
 OBJS =  $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LIBFT = $(SRC_DIR)/libarys/libft/libft.a
 MLX = $(SRC_DIR)/libarys/mlx/libmlx.a
@@ -20,6 +20,9 @@ GNL = $(SRC_DIR)/libarys/get_next_line/get_next_line.c \
 		$(SRC_DIR)/libarys/get_next_line/get_next_line_utils.c
 
 all: $(NAME)
+
+vg:		all
+		valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes ./cub3d a
 
 $(NAME): $(MLX) $(OBJ_DIR) $(OBJS) $(LIBFT)
 	@echo "\n"f
