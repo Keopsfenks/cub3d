@@ -1,0 +1,3 @@
+C:/projectsC/42cursus-cub3d/cmake-build-debug/CMakeFiles/42cursus_cub3d.dir
+C:/projectsC/42cursus-cub3d/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/projectsC/42cursus-cub3d/cmake-build-debug/CMakeFiles/rebuild_cache.dir

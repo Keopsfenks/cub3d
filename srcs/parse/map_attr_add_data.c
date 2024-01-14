@@ -35,8 +35,11 @@ void	attr_add_data(char *line \
 	, t_map **texture, enum e_map type, int *check)
 {
 	int		i;
+	int		j;
+	char	color[12];
 
 	i = 0;
+	j = 0;
 	*check += 1;
 	attr_add_data2(type, line, &i);
 	if (type == FLOOR || type == CEILING)
@@ -45,22 +48,24 @@ void	attr_add_data(char *line \
 		while (line[i] && line[i] == ' ')
 			i++;
 	}
-	ms_lstadd_back(texture, ms_lstnew(type \
-		, ft_substr(line, i, ft_strlen(line + i) - 1)));
+	while (line[i] && (type == FLOOR || type == CEILING))
+	{
+		if (ft_isdigit(line[i]) || line[i] == ',')
+			color[j++] = line[i];
+		i++;
+	}
+	if ((type == FLOOR || type == CEILING))
+		ms_lstadd_back(texture, ms_lstnew(type, ft_strdup(color)));
+	else
+		ms_lstadd_back(texture, ms_lstnew(type \
+			, ft_substr(line, i, ft_strlen(line + i) - 1)));
 }
 
-void	num_limit_check2(t_map *tmp, int *i, int *size, int *num)
+void	num_limit_check2(t_map *tmp, char *color)
 {
-	char	*str;
-
-	if (tmp->line[(*i)] == ',' || tmp->line[(*i)] == '\n')
-	{
-		str = ft_substr(tmp->line, (*num) - (*size), (*size));
-		if (ft_atoi(str) > 255)
-			ft_error();
-		(*size) = 0;
-		free(str);
-	}
+	if (ft_atoi(color) > 255)
+		ft_error();
+	free(color);
 }
 
 void	num_limit_check(t_map *color)
@@ -75,18 +80,65 @@ void	num_limit_check(t_map *color)
 	num = 0;
 	while (tmp)
 	{
-		i = -1;
-		while (tmp->line[++i])
+		i = 0;
+		while (1)
 		{
 			if (ft_isdigit(tmp->line[i]))
 			{
 				size++;
-				num = i + 1;
+				i++;
+				continue;
 			}
-			num_limit_check2(tmp, &i, &size, &num);
+			num_limit_check2(tmp, ft_substr(tmp->line, i - size, size));
+			size = 0;
+			i++;
+			if (!tmp->line[i])
+				break ;
 		}
 		tmp = tmp->next;
 	}
+}
+
+void	map_add_data(char *line, t_map **map)
+{
+	int nl;
+
+	nl = 0;
+	if ((line[0] == '\0' || line[0] == '\n')
+		&& ft_strlen(line) <= 1)
+		return ;
+	if (ft_strlen(line) - 1 == '\n')
+		nl = 1;
+	ms_lstadd_back(map, ms_lstnew(MAP, ft_substr(line, 0, ft_strlen(line) - nl)));
+}
+
+void	add_map_doublearray(char ***map, t_map *temp_map, t_data *data)
+{
+	int size;
+	int x;
+	int y;
+
+	y = 0;
+	size = ms_lstsize(temp_map);
+	data->attr->map_y = size;
+	(*map) = malloc(sizeof(char *) * (size + 1));
+	while (temp_map)
+	{
+		(*map)[y] = ft_strdup(temp_map->line);
+		x = -1;
+		while ((*map)[y][++x])
+		{
+			if ((*map)[y][x] == 'E' || (*map)[y][x] == 'W'
+				|| (*map)[y][x] == 'N' || (*map)[y][x] == 'S')
+			{
+				data->p_x = (float)x * 64;
+				data->p_y = (float)y * 64;
+			}
+		}
+		y++;
+		temp_map = temp_map->next;
+	}
+	(*map)[y] = NULL;
 }
 
 void	map_attr_add_data(t_data *data)
@@ -98,21 +150,22 @@ void	map_attr_add_data(t_data *data)
 	check = 0;
 	while (map)
 	{
-		if (map_find_attr(map->line, "SO"))
+		if (map_find_attr(map->line, "SO") && check != 6)
 			attr_add_data(map->line, &(data->attr->texture), SOUTH, &check);
-		else if (map_find_attr(map->line, "NO"))
+		else if (map_find_attr(map->line, "NO") && check != 6)
 			attr_add_data(map->line, &(data->attr->texture), NORTH, &check);
-		else if (map_find_attr(map->line, "EA"))
+		else if (map_find_attr(map->line, "EA") && check != 6)
 			attr_add_data(map->line, &(data->attr->texture), EAST, &check);
-		else if (map_find_attr(map->line, "WE"))
+		else if (map_find_attr(map->line, "WE") && check != 6)
 			attr_add_data(map->line, &(data->attr->texture), WEST, &check);
-		else if (map_find_attr(map->line, "C"))
+		else if (map_find_attr(map->line, "C") && check != 6)
 			attr_add_data(map->line, &(data->attr->color), CEILING, &check);
-		else if (map_find_attr(map->line, "F"))
+		else if (map_find_attr(map->line, "F") && check != 6)
 			attr_add_data(map->line, &(data->attr->color), FLOOR, &check);
+		else if (check == 6)
+			map_add_data(map->line, &data->attr->map);
 		map = map->next;
-		if (check == 6)
-			break ;
 	}
 	num_limit_check(data->attr->color);
+	add_map_doublearray(&(data->attr->arr_map), data->attr->map, data);
 }

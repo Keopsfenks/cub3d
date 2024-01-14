@@ -50,3 +50,16 @@ t_map	*ms_lstlast(t_map *lst)
 	}
 	return (lst);
 }
+
+int	ms_lstsize(t_map *lst)
+{
+	int	i;
+
+	i = 0;
+	while (lst != NULL)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
+}

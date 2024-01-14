@@ -23,11 +23,28 @@ void	map_left_wall_check(t_map *map, bool **flag)
 		**flag = true;
 }
 
+void	parse_with_p_dir(t_map	*map, bool *flag, int *found)
+{
+	t_map	*temp;
+	int		i;
+
+	temp = map;
+	i = -1;
+	while (temp->line[++i])
+	{
+		if (temp->line[i] == 'E' || temp->line[i] == 'W'
+		|| temp->line[i] == 'N' || temp->line[i] == 'S')
+			(*found) += 1;
+	}
+}
+
 void	which_select_parse2(t_map *map, bool *flag)
 {
 	bool	check;
+	int 	found;
 
 	check = true;
+	found = 0;
 	while (map && *flag == false)
 	{
 		if ((map->line[0] == '\0' || map->line[0] == '\n')
@@ -40,12 +57,25 @@ void	which_select_parse2(t_map *map, bool *flag)
 		map_find_space_in_content(map, &flag);
 		map_invalid_char(map->line, &flag);
 		map_left_wall_check(map, &flag);
+		parse_with_p_dir(map, flag, &found);
 		map = map->next;
 	}
+	if (found != 1)
+		(*flag) = true;
 }
 
 bool	where_attr_map(t_map *map, bool *flag)
 {
+	while (map)
+	{
+		if ((map->line[0] == '\0' || map->line[0] == '\n')
+			&& ft_strlen(map->line) <= 1)
+		{
+			map = map->next;
+			continue ;
+		}
+		break ;
+	}
 	if (!map)
 		return (*flag = true, true);
 	if (map && map->line[0] == '\0')

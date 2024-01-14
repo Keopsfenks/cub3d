@@ -11,7 +11,7 @@ SRC_DIR = srcs
 OBJ_DIR = srcs/obj
 CC = gcc
 RM = rm -rf
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = #-fsanitize=address #-Wall -Wextra -Werror
 LFLAGS = -L./srcs/libarys/mlx -lmlx -L/usr/lib -I/usr/include -lXext -lX11 -lm -lz -O2
 OBJS =  $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LIBFT = $(SRC_DIR)/libarys/libft/libft.a
@@ -25,7 +25,6 @@ vg:		all
 		valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes ./cub3d a
 
 $(NAME): $(MLX) $(OBJ_DIR) $(OBJS) $(LIBFT)
-	@echo "\n"f
 	@$(CC) $(CFLAGS) $(OBJS) $(GNL) $(LIBFT) $(MLX) -o $(NAME) $(LFLAGS)
 	@echo "\033[5m\033[32mBuild successfull !\033[25m\033[0m"
 
