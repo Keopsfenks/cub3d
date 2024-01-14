@@ -114,6 +114,8 @@ typedef struct s_data
 	float p_y; // player y;
 	t_image image;
 	t_texture	textures[2];
+	int	skyc;
+	int floorc;
 	char	*map_arg;
 	t_map	*map_cub;
 	t_var	var;

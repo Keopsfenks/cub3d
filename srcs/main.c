@@ -195,7 +195,7 @@ void put_background(t_data *data)
 		x = 0;
 		while (x <= data->windowWidth)
 		{
-			img_pix_put(&data->image, x, y, 0x2b2a26);
+			img_pix_put(&data->image, x, y, data->skyc);
 			x++;
 		}
 		y++;
@@ -205,7 +205,7 @@ void put_background(t_data *data)
 		x = 0;
 		while (x <= data->windowWidth)
 		{
-			img_pix_put(&data->image, x, y, 0x000000);
+			img_pix_put(&data->image, x, y, data->floorc);
 			x++;
 		}
 		y++;
@@ -286,6 +286,34 @@ void ft_init(t_data *data)
 
 }
 
+void	create_rgb(char *line, enum e_map type, t_data *data)
+{
+	int 	color[3];
+	int 	i;
+	int 	j;
+	int 	result;
+
+	i = -1;
+	result = 0;
+	j = 0;
+	while (line[++i])
+	{
+		while (line[i] && ft_isdigit(line[i]))
+		{
+			result = (result * 10) + (line[i] - '0');
+			i++;
+		}
+		color[j] = result;
+		result = 0;
+		j++;
+	}
+	if (type == CEILING)
+		data->skyc = (color[0] << 16 | color[1] << 8 | color[2]);
+	else if (type == FLOOR)
+		data->floorc = (color[0] << 16 | color[1] << 8 | color[2]);
+
+}
+
 void	draw_utils(t_data *data)
 {
 	int w;
@@ -305,6 +333,11 @@ void	draw_utils(t_data *data)
 	data->enemy_img = mlx_xpm_file_to_image(data->mlx, "srcs/texture/enemy.xpm", &w, &w);
 	data->c_img = mlx_xpm_file_to_image(data->mlx, "srcs/texture/c.xpm", &w, &w);
 
+	while (data->attr->color)
+	{
+		create_rgb(data->attr->color->line, data->attr->color->type, data);
+		data->attr->color = data->attr->color->next;
+	}
 }
 
 

@@ -54,6 +54,7 @@ void	attr_add_data(char *line \
 			color[j++] = line[i];
 		i++;
 	}
+	color[j] = '\0';
 	if ((type == FLOOR || type == CEILING))
 		ms_lstadd_back(texture, ms_lstnew(type, ft_strdup(color)));
 	else
@@ -73,11 +74,9 @@ void	num_limit_check(t_map *color)
 	t_map	*tmp;
 	int		i;
 	int		size;
-	int		num;
 
 	tmp = color;
 	size = 0;
-	num = 0;
 	while (tmp)
 	{
 		i = 0;

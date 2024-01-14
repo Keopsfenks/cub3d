@@ -112,9 +112,22 @@ bool	which_select_parse(t_data *data)
 	return (flag);
 }
 
+void	check_file_name(char *name)
+{
+	int	len;
+
+	len = (int)ft_strlen(name);
+	if (len < 5)
+		ft_error();
+	if (name[len - 1] != 'b' || name[len - 2] != 'u' || name[len - 3] != 'c'
+		|| name[len - 4] != '.')
+		ft_error();
+}
+
 void	ft_parse(t_data *data)
 {
 	read_map(data);
+	check_file_name(data->map_arg);
 	if (which_select_parse(data))
 		ft_error();
 	map_attr_add_data(data);
