@@ -21,6 +21,8 @@
 #define W 119
 #define A 97
 #define D 100
+#define RIGHT_ARROW 65361
+#define LEFT_ARROW 65363
 #define ESC 65307
 
 # include <stddef.h>

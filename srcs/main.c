@@ -234,13 +234,11 @@ void FAKE_DDA(int X0, int Y0, int X1, int Y1, t_data *data, bool *check)
 		Y += Yinc;
 	}
 	float distance = (sqrt(pow(data->p_x + 8 - X, 2) + pow(data->p_y + 8 - Y, 2)) * cos(data->currentAngle - pa));
-	printf("%f\n", distance);
 	if (distance < 6.0f)
 		(*check) = true;
 	else
 		(*check) = false;
 }
-
 
 int	key_event(int keycode, t_data *data)
 {
@@ -248,7 +246,25 @@ int	key_event(int keycode, t_data *data)
 	printf("x: %d\n", (int)((data->p_x - 12) + pdx+20) / 64);
 	printf("wall value: %c\n", data->attr->arr_map[(int)((data->p_y - 12) + pdy+20) / 64][(int)((data->p_x - 12) + pdx+20) / 64]);
 	printf("\n");*/
-	if (keycode == W)
+	if (keycode == RIGHT_ARROW)
+	{
+		pa-= 0.1;
+		if (pa < 0)
+			pa += 2*PI;
+		pdx = cos(pa) * 5;
+		pdy = sin(pa) * 5;
+		data->pl_a -= pa * 5 ;
+	}
+	else if (keycode == LEFT_ARROW)
+	{
+		pa+= 0.1;
+		if (pa > 2*PI)
+			pa -= 2*PI;
+		pdx = cos(pa) * 5;
+		pdy = sin(pa) * 5;
+		data->pl_a += pa * 5;
+	}
+	else if (keycode == W)
 	{
 		if (data->attr->arr_map[(int)((data->p_y - 12) + pdy+20) / 64][(int)((data->p_x - 12) + pdx+20) / 64] != '1')
 		{
@@ -264,76 +280,32 @@ int	key_event(int keycode, t_data *data)
 			data->p_x -= pdx;
 		}
 	}
-	else if (keycode == A)
-	{
-		pa-= 0.1;
-		if (pa < 0)
-			pa += 2*PI;
-		pdx = cos(pa) * 5;
-		pdy = sin(pa) * 5;
-		data->pl_a -= pa * 5 ;
-	}
 	else if (keycode == D)
 	{
-		pa+= 0.1;
-		if (pa > 2*PI)
-			pa -= 2*PI;
-		pdx = cos(pa) * 5;
-		pdy = sin(pa) * 5;
-		data->pl_a += pa * 5;
+		float t_pdy = cos(pa) * 5;
+		float t_pdx = -sin(pa) * 5;
+		printf("%c\n", data->attr->arr_map[(int)((data->p_y - 12) - t_pdy+20) / 64][(int)((data->p_x - 12) - t_pdx+20) / 64]);
+		if (data->attr->arr_map[(int)((data->p_y - 12) - t_pdy+20) / 64][(int)((data->p_x - 12) - t_pdx+20) / 64] != '1')
+		{
+			data->p_y -= t_pdy;
+			data->p_x -= t_pdx;
+		}
 	}
-	else if (keycode == 53)
+	else if (keycode == A)
+	{
+		float t_pdy = cos(pa) * 5;
+		float t_pdx = -sin(pa) * 5;
+		if (data->attr->arr_map[(int)((data->p_y - 12) + t_pdy+20) / 64][(int)((data->p_x - 12) + t_pdx+20) / 64] != '1')
+		{
+			data->p_y += t_pdy;
+			data->p_x += t_pdx;
+		}
+	}
+	else if (keycode == ESC)
 	{
 		printf("\n***exit***\n\n");
 		exit(0);
 	}
-	mlx_clear_window(data->mlx, data->mlx_win);
-	//draw2Dmap(data);
-	//mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, data->p_x, data->p_y);
-	jd = 0;
-	/*float constEndX = data->p_x - 12 + cos(constAngle) * -1024; Arkaya ray atıyor.
-	float constEndY = data->p_y - 12 + sin(constAngle) * -1024;*/
-	float constAngle;
-	float constEndX;
-	float constEndY;
-	bool *check;
-	for (int i = 0; i < 4; i++)
-	{
-		if (i == 0)
-		{
-			constAngle = pa + (0.1f * DR) + 29.924f;
-			check = &data->d_check;
-		}
-		else if (i == 1)
-		{
-			constAngle = pa + (0.1f * DR) - 29.78f;
-			check = &data->a_check;
-		}
-		else if (i == 2)
-		{
-			constAngle = pa + (0.1f * DR) + 25.22f;
-			check = &data->s_check;
-		}
-		else
-		{
-			constAngle = pa + (0.1f * DR) - 9.35f;
-			check = &data->w_check;
-		}
-		constEndX = data->p_x - 12 + cos(constAngle) * -1024;
-		constEndY = data->p_y - 12 + sin(constAngle) * -1024;
-		//FAKE_DDA(data->p_x - 12 , data->p_y - 12, (int)constEndX, (int)constEndY, data, check);
-	}
-	for (float i = -30; i <= 30; i+= 0.1) {
-		data->currentAngle = pa + (i * DR); // pov
-		float endX = data->p_x - 12 + cos(data->currentAngle) * 1024;
-		float endY = data->p_y - 12 + sin(data->currentAngle) * 1024;
-		DDA(data->p_x - 12 , data->p_y - 12, (int)endX, (int)endY, data, &data->w_check);
-	}
-	// drawCeiling(data);
-	// drawFloor(data);
-	put_background(data);
-	draw3DView(data, 600);
-	mlx_put_image_to_window(data->mlx, data->mlx_win, data->image.window, 0, 0);
 	return (0);
 }
 
@@ -411,6 +383,58 @@ void	draw_utils(t_data *data)
 	}
 }
 
+int	raycasting(t_data *data)
+{
+	mlx_clear_window(data->mlx, data->mlx_win);
+	//draw2Dmap(data);
+	//mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, data->p_x, data->p_y);
+	jd = 0;
+	/*float constEndX = data->p_x - 12 + cos(constAngle) * -1024; Arkaya ray atıyor.
+	float constEndY = data->p_y - 12 + sin(constAngle) * -1024;*/
+	float constAngle;
+	float constEndX;
+	float constEndY;
+	bool *check;
+	//draw2Dmap(data);
+	for (int i = 0; i < 4; i++)
+	{
+		if (i == 0)
+		{
+			constAngle = pa + (0.1f * DR) + 29.924f;
+			check = &data->d_check;
+		}
+		else if (i == 1)
+		{
+			constAngle = pa + (0.1f * DR) - 29.78f;
+			check = &data->a_check;
+		}
+		else if (i == 2)
+		{
+			constAngle = pa + (0.1f * DR) + 25.22f;
+			check = &data->s_check;
+		}
+		else
+		{
+			constAngle = pa + (0.1f * DR) - 9.35f;
+			check = &data->w_check;
+		}
+		constEndX = data->p_x - 12 + cos(constAngle) * -1024;
+		constEndY = data->p_y - 12 + sin(constAngle) * -1024;
+		//FAKE_DDA(data->p_x - 12 , data->p_y - 12, (int)constEndX, (int)constEndY, data, check);
+	}
+	for (float i = -30; i <= 30; i+= 0.1) {
+		data->currentAngle = pa + (i * DR); // pov
+		float endX = data->p_x - 12 + cos(data->currentAngle) * 1024;
+		float endY = data->p_y - 12 + sin(data->currentAngle) * 1024;
+		DDA(data->p_x - 12 , data->p_y - 12, (int)endX, (int)endY, data, &data->w_check);
+	}
+	// drawCeiling(data);
+	// drawFloor(data);s
+	put_background(data);
+	draw3DView(data, 600);
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->image.window, 0, 0);
+}
+
 
 int main(int ac, char **av)
 {
@@ -428,6 +452,7 @@ int main(int ac, char **av)
 	// 		mlx_pixel_put(data->mlx, data->mlx_win, x, y, 0xFFFFFF);
 	// }
 	mlx_hook(data->mlx_win, 2, 1L << 0, &key_event, data);
+	mlx_loop_hook(data->mlx, &raycasting, data);
 	mlx_loop(data->mlx);
 }
 
