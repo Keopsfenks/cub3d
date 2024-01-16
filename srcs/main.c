@@ -148,7 +148,7 @@ void DDA(int X0, int Y0, int X1, int Y1, t_data *data, bool *check)
     float Y = Y0 + 20; // starting position of the line Y
     while (1) {
 		if (data->attr->arr_map[(int)(Y) / 64][(int)(X) / 64] != '1')
-			mlx_pixel_put(data->mlx, data->mlx_win, X, Y, 0xFF0000);
+			;//mlx_pixel_put(data->mlx, data->mlx_win, X, Y, 0xFF0000);
 		else // wall
 		{
 			// printf("wall %d\n", map[(((int)(Y) / 64) * mapY) + (int)((X-5) / 64)]);
@@ -244,13 +244,13 @@ void FAKE_DDA(int X0, int Y0, int X1, int Y1, t_data *data, bool *check)
 
 int	key_event(int keycode, t_data *data)
 {
-	printf("y: %d\n", (int)(data->p_y + pdy+7) / 64);
-	printf("x: %d\n", (int)(data->p_x + pdx+7) / 64);
-	printf("wall value: %c\n", data->attr->arr_map[(int)(data->p_y + pdy+7) / 64][(int)(data->p_x + pdx+7) / 64]);
-	printf("\n");
+/*	printf("y: %d\n", (int)((data->p_y - 12) + pdy+20) / 64);
+	printf("x: %d\n", (int)((data->p_x - 12) + pdx+20) / 64);
+	printf("wall value: %c\n", data->attr->arr_map[(int)((data->p_y - 12) + pdy+20) / 64][(int)((data->p_x - 12) + pdx+20) / 64]);
+	printf("\n");*/
 	if (keycode == W)
 	{
-		if (data->attr->arr_map[(int)(data->p_y + pdy+7) / 64][(int)(data->p_x + pdx+7) / 64] != '1')
+		if (data->attr->arr_map[(int)((data->p_y - 12) + pdy+20) / 64][(int)((data->p_x - 12) + pdx+20) / 64] != '1')
 		{
 			data->p_y += pdy;
 			data->p_x += pdx;
@@ -258,7 +258,7 @@ int	key_event(int keycode, t_data *data)
 	}
 	else if (keycode == S)
 	{
-		if (data->s_check == false)
+		if (data->attr->arr_map[(int)((data->p_y - 12) - pdy+20) / 64][(int)((data->p_x - 12) - pdx+20) / 64] != '1')
 		{
 			data->p_y -= pdy;
 			data->p_x -= pdx;
@@ -288,8 +288,8 @@ int	key_event(int keycode, t_data *data)
 		exit(0);
 	}
 	mlx_clear_window(data->mlx, data->mlx_win);
-	draw2Dmap(data);
-	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, data->p_x, data->p_y);
+	//draw2Dmap(data);
+	//mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, data->p_x, data->p_y);
 	jd = 0;
 	/*float constEndX = data->p_x - 12 + cos(constAngle) * -1024; Arkaya ray atıyor.
 	float constEndY = data->p_y - 12 + sin(constAngle) * -1024;*/
@@ -333,7 +333,7 @@ int	key_event(int keycode, t_data *data)
 	// drawFloor(data);
 	put_background(data);
 	draw3DView(data, 600);
-	//mlx_put_image_to_window(data->mlx, data->mlx_win, data->image.window, 0, 0);
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->image.window, 0, 0);
 	return (0);
 }
 
