@@ -76,65 +76,63 @@ unsigned int	get_pixel_in_texture(t_texture *texture, int x, int y)
 
 
 void draw3DView(t_data *data, int numRays) {
-    float wallHeight = data->windowHeight * 10;
 
-    int windowWidth = data->windowWidth; // upd from data 
-    int windowHeight = data->windowHeight; // upd from data
+	int height;
+	int start;
+	int walltstart;
+	int walltend;
+	int end,j;
+	unsigned wallcolor;
 
-    for (int i = 0; i < numRays; i++) {
-        float distanceToWall = data->distances[i];
-		// printf("orta cizgi uzunluk -> %f en sağ çizgi uzunluk -> %f en sol --> %f \n", data->distances[29], data->distances[59], data->distances[0]);
-
-        float wallSize = (1 / distanceToWall) * wallHeight;
-        float wallThickness = (1 / distanceToWall);
-
-        int wallCenter = windowHeight / 2;
-
-        float wallStart = wallCenter - (wallSize) * 2;
-        float wallEnd = wallCenter + (wallSize) * 2;
-
-        int wallThicknessStart = i - (wallThickness);
-        int wallThicknessEnd = i + (wallThickness);
-
-        int wallColor = 0x402414;
-		if (wallStart < 0)
-			wallStart = 0;
-		if (wallEnd > wallHeight)
-			wallEnd = wallHeight - 1;
-		// printf("wallsize -> %f\n", wallSize);
-        for (int j = wallStart; j <= wallEnd; j++)
+	for (int i = 0; i < numRays; i++)
+	{
+		walltstart = i - (1 / data->distances[i]);
+		walltend = i + (1 / data->distances[i]);
+		height = (data->windowHeight * 30 / data->distances[i]) ;
+		start = (data->windowHeight / 2) - (height / 2);
+		end = (data->windowHeight / 2) + (height / 2);
+		if (start < 0)
+			j = 0;
+		else
+			j = start;
+		for (; j < end; j++)
 		{
-            for (int k = wallThicknessStart * 0.001670 * (windowWidth) ; k <= wallThicknessEnd * 0.001670 * (windowWidth); k++)
+			for (int k = walltstart * 0.001670 * (data->windowWidth); k <= walltend * 0.001670 * (data->windowWidth); k++)
 			{
-				float wall_tes = (((j) - (wallStart)) * 14) / (wallSize);
-				wallColor = get_pixel_in_texture(&data->textures[0], (data->wall_X[i]) * 64, wall_tes);
+				if (j >= data->windowHeight)
+					break;
+				float wall_tes = (j - start) * 64.0 / height;
+				// printf("wall_X -> %f wall_Y -> %f\n", data->wall_X[i], data->wall_Y[i]);
+				float x = data->wall_X[i] - floor(data->wall_X[i]);
+				float y = data->wall_Y[i] - floor(data->wall_Y[i]);
+				wallcolor = get_pixel_in_texture(&data->textures[0], (x) * 64, wall_tes);
 				if (data->wall_direction[i] == 1)
-					img_pix_put(&data->image, k, j, wallColor);
+					img_pix_put(&data->image, k, j, wallcolor);
 				else if (data->wall_direction[i] == 3)
-					img_pix_put(&data->image, k, j, wallColor);
+					img_pix_put(&data->image, k, j, wallcolor);
 				else
 				{
-					wallColor = get_pixel_in_texture(&data->textures[1], (data->wall_Y[i]) * 64, wall_tes);
-					img_pix_put(&data->image, k, j, wallColor);
+					wallcolor = get_pixel_in_texture(&data->textures[1], (y) * 64, wall_tes);
+					img_pix_put(&data->image, k, j, wallcolor);
 				}
 				// if (data->wall_direction[i] == 0)
 				// 	data->wall_direction[i] = data->wall_direction[i-1];
 				// if (data->wall_direction[i] == 3)
-                // 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, 0xFFFF00);
+				// 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, 0xFFFF00);
 				// else if (data->wall_direction[i] == 1)
-                // 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, 0xFF0000);
-                // 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, 0xFFFFFF);
-                // 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, wallColor);
-            }
-        }
-    }
+				// 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, 0xFF0000);
+				// 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, 0xFFFFFF);
+				// 	mlx_pixel_put(data->mlx, data->mlx_win, k + (windowWidth / 2), j, wallColor);
+			}
+		}
+	}
 }
 
 int jd = 0;
 
 int abs(int n) { return ((n > 0) ? n : (n * (-1))); } 
 
-void DDA(int X0, int Y0, int X1, int Y1, t_data *data)
+void DDA(int X0, int Y0, int X1, int Y1, t_data *data, bool *check)
 {
     int dx = X1 - X0;
     int dy = Y1 - Y0;
@@ -150,8 +148,7 @@ void DDA(int X0, int Y0, int X1, int Y1, t_data *data)
     float Y = Y0 + 20; // starting position of the line Y
     while (1) {
 		if (data->attr->arr_map[(int)(Y) / 64][(int)(X) / 64] != '1')
-			;
-			//mlx_pixel_put(data->mlx, data->mlx_win, X, Y, 0xFF0000);
+			mlx_pixel_put(data->mlx, data->mlx_win, X, Y, 0xFF0000);
 		else // wall
 		{
 			// printf("wall %d\n", map[(((int)(Y) / 64) * mapY) + (int)((X-5) / 64)]);
@@ -212,18 +209,60 @@ void put_background(t_data *data)
 	}
 }
 
+void FAKE_DDA(int X0, int Y0, int X1, int Y1, t_data *data, bool *check)
+{
+	int dx = X1 - X0;
+	int dy = Y1 - Y0;
+	int num = -1;
+	int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+
+	float Xinc = dx / (float)steps;
+	float Yinc = dy / (float)steps;
+	int yon = 0;
+
+//  +20 for player pos
+	float X = X0 + 20; // starting position of the line X
+	float Y = Y0 + 20; // starting position of the line Y
+	while (1) {
+		if (data->attr->arr_map[(int)(Y) / 64][(int)(X) / 64] != '1')
+			;
+			//mlx_pixel_put(data->mlx, data->mlx_win, X, Y, 0xFF0000);
+		else // wall
+
+			break;
+		X += Xinc;
+		Y += Yinc;
+	}
+	float distance = (sqrt(pow(data->p_x + 8 - X, 2) + pow(data->p_y + 8 - Y, 2)) * cos(data->currentAngle - pa));
+	printf("%f\n", distance);
+	if (distance < 6.0f)
+		(*check) = true;
+	else
+		(*check) = false;
+}
+
 
 int	key_event(int keycode, t_data *data)
 {
+	printf("y: %d\n", (int)(data->p_y + pdy+7) / 64);
+	printf("x: %d\n", (int)(data->p_x + pdx+7) / 64);
+	printf("wall value: %c\n", data->attr->arr_map[(int)(data->p_y + pdy+7) / 64][(int)(data->p_x + pdx+7) / 64]);
+	printf("\n");
 	if (keycode == W)
 	{
-		data->p_y += pdy;
-		data->p_x += pdx;
+		if (data->attr->arr_map[(int)(data->p_y + pdy+7) / 64][(int)(data->p_x + pdx+7) / 64] != '1')
+		{
+			data->p_y += pdy;
+			data->p_x += pdx;
+		}
 	}
 	else if (keycode == S)
 	{
-		data->p_y -= pdy;
-		data->p_x -= pdx;
+		if (data->s_check == false)
+		{
+			data->p_y -= pdy;
+			data->p_x -= pdx;
+		}
 	}
 	else if (keycode == A)
 	{
@@ -249,20 +288,52 @@ int	key_event(int keycode, t_data *data)
 		exit(0);
 	}
 	mlx_clear_window(data->mlx, data->mlx_win);
-	//draw2Dmap(data);
-	//mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, data->p_x, data->p_y);
+	draw2Dmap(data);
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img, data->p_x, data->p_y);
 	jd = 0;
+	/*float constEndX = data->p_x - 12 + cos(constAngle) * -1024; Arkaya ray atıyor.
+	float constEndY = data->p_y - 12 + sin(constAngle) * -1024;*/
+	float constAngle;
+	float constEndX;
+	float constEndY;
+	bool *check;
+	for (int i = 0; i < 4; i++)
+	{
+		if (i == 0)
+		{
+			constAngle = pa + (0.1f * DR) + 29.924f;
+			check = &data->d_check;
+		}
+		else if (i == 1)
+		{
+			constAngle = pa + (0.1f * DR) - 29.78f;
+			check = &data->a_check;
+		}
+		else if (i == 2)
+		{
+			constAngle = pa + (0.1f * DR) + 25.22f;
+			check = &data->s_check;
+		}
+		else
+		{
+			constAngle = pa + (0.1f * DR) - 9.35f;
+			check = &data->w_check;
+		}
+		constEndX = data->p_x - 12 + cos(constAngle) * -1024;
+		constEndY = data->p_y - 12 + sin(constAngle) * -1024;
+		//FAKE_DDA(data->p_x - 12 , data->p_y - 12, (int)constEndX, (int)constEndY, data, check);
+	}
 	for (float i = -30; i <= 30; i+= 0.1) {
 		data->currentAngle = pa + (i * DR); // pov
 		float endX = data->p_x - 12 + cos(data->currentAngle) * 1024;
 		float endY = data->p_y - 12 + sin(data->currentAngle) * 1024;
-		DDA(data->p_x - 12 , data->p_y - 12, (int)endX, (int)endY, data);
+		DDA(data->p_x - 12 , data->p_y - 12, (int)endX, (int)endY, data, &data->w_check);
 	}
 	// drawCeiling(data);
 	// drawFloor(data);
 	put_background(data);
 	draw3DView(data, 600);
-	mlx_put_image_to_window(data->mlx, data->mlx_win, data->image.window, 0, 0);
+	//mlx_put_image_to_window(data->mlx, data->mlx_win, data->image.window, 0, 0);
 	return (0);
 }
 

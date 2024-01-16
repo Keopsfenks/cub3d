@@ -109,6 +109,10 @@ typedef struct s_data
 	float currentAngle;
 	void *floor_img;
 	float 	*wall_X;
+	bool	w_check;
+	bool	a_check;
+	bool	d_check;
+	bool	s_check;
 	float 	*wall_Y;
 	float p_x; // player x;
 	float p_y; // player y;
