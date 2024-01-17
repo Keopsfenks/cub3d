@@ -11,13 +11,13 @@ SRC_DIR = srcs
 OBJ_DIR = srcs/obj
 CC = gcc
 RM = rm -rf
-CFLAGS = #-fsanitize=address #-Wall -Wextra -Werror
-LFLAGS = -L./srcs/libarys/mlx -lmlx -L/usr/lib -I/usr/include -lXext -lX11 -lm -lz -O2
+CFLAGS = -O3 #-fsanitize=address #-Wall -Wextra -Werror
+LFLAGS = -L./srcs/librarys/mlx -lmlx -L/usr/lib -I/usr/include -lXext -lX11 -lm -lz -O2
 OBJS =  $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-LIBFT = $(SRC_DIR)/libarys/libft/libft.a
-MLX = $(SRC_DIR)/libarys/mlx/libmlx.a
-GNL = $(SRC_DIR)/libarys/get_next_line/get_next_line.c \
-		$(SRC_DIR)/libarys/get_next_line/get_next_line_utils.c
+LIBFT = $(SRC_DIR)/librarys/libft/libft.a
+MLX = $(SRC_DIR)/librarys/mlx/libmlx.a
+GNL = $(SRC_DIR)/librarys/get_next_line/get_next_line.c \
+		$(SRC_DIR)/librarys/get_next_line/get_next_line_utils.c
 
 all: $(NAME)
 
@@ -34,25 +34,25 @@ $(OBJ_DIR):
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@printf "\033[33mGenerating Cub3D objects... %-33.33s\r" $@
-	@${CC} ${CFLAGS} -c $< -o $@
+	@${CC} ${CFLAGS} -c $< -o $@ -g
 
 $(LIBFT):
-	@make -C ./srcs/libarys/libft
-	@make bonus -C ./srcs/libarys/libft
+	@make -C ./srcs/librarys/libft
+	@make bonus -C ./srcs/librarys/libft
 
 $(MLX):
-	@make -C ./srcs/libarys/mlx
+	@make -C ./srcs/librarys/mlx
 
 clean:
 	$(RM) $(OBJ_DIR)
-	@make clean -C ./srcs/libarys/libft
-	@make clean -C ./srcs/libarys/mlx	
+	@make clean -C ./srcs/librarys/libft
+	@make clean -C ./srcs/librarys/mlx
 
 fclean:	clean
 	$(RM) $(NAME)
 	$(RM) $(LIBFT)
 	$(RM) $(MLX)
-		
+
 re:	fclean all
 
 .PHONY: all re clean fclean

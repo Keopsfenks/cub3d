@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_attr_add_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: segurbuz <segurbuz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ogenc <ogenc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 09:43:31 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/11/17 04:17:26 by segurbuz         ###   ########.fr       */
+/*   Updated: 2024/01/17 16:54:11 by ogenc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	num_limit_check(t_map *color)
 	while (tmp)
 	{
 		i = 0;
-		while (1)
+		while (tmp->line[i])
 		{
 			if (ft_isdigit(tmp->line[i]))
 			{
@@ -91,8 +91,6 @@ void	num_limit_check(t_map *color)
 			num_limit_check2(tmp, ft_substr(tmp->line, i - size, size));
 			size = 0;
 			i++;
-			if (!tmp->line[i])
-				break ;
 		}
 		tmp = tmp->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keopsfenks <keopsfenks@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ogenc <ogenc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 19:31:44 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/12/05 01:32:37 by keopsfenks       ###   ########.fr       */
+/*   Updated: 2024/01/17 18:54:39 by ogenc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,6 @@ void	map_invalid_char(char *line, bool **flag)
 			&& line[i] != '0' && line[i] != 'N' \
 			&& line[i] != 'S' && line[i] != 'E' \
 			&& line[i] != 'W' && line[i] != '\n')
-			**flag = true;
+				**flag = true;
 	}
 }

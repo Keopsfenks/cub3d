@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keopsfenks <keopsfenks@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ogenc <ogenc@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 22:28:38 by segurbuz          #+#    #+#             */
-/*   Updated: 2023/12/09 04:03:23 by keopsfenks       ###   ########.fr       */
+/*   Updated: 2024/01/17 16:56:05 by ogenc            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@
 # include <fcntl.h>
 # include <math.h>
 # include <stdbool.h>
-# include "../libarys/mlx/mlx.h"
-# include "../libarys/libft/libft.h"
-# include "../libarys/get_next_line/get_next_line.h"
+# include "../librarys/mlx/mlx.h"
+# include "../librarys/libft/libft.h"
+# include "../librarys/get_next_line/get_next_line.h"
 
 enum	e_map
 {
@@ -119,7 +119,7 @@ typedef struct s_data
 	float p_x; // player x;
 	float p_y; // player y;
 	t_image image;
-	t_texture	textures[2];
+	t_texture	textures[4];
 	int	skyc;
 	int floorc;
 	char	*map_arg;
